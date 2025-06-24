@@ -14,18 +14,18 @@ A personal finance tracker built with Spring Boot, designed to help users manage
 
 ## 🛠️ Technologies Used
 
-- [Java 17]([url](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html))
-- [Spring Boot]([url](https://spring.io/projects/spring-boot))
-- [Spring Data JPA]([url](https://spring.io/projects/spring-data-jpa))
-- [H2 Database]([url](https://h2database.com/html/main.html))
-- [Lombok]([url](https://projectlombok.org/))
-- [Maven]([url](https://maven.apache.org/))
+- [Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
+- [Spring Boot](https://spring.io/projects/spring-boot)
+- [Spring Data JPA](https://spring.io/projects/spring-data-jpa)
+- [H2 Database](https://h2database.com/html/main.html)
+- [Lombok](https://projectlombok.org)
+- [Maven](https://maven.apache.org)
 
 ## 🚀 Getting Started
 ### Prerequisites
 - [Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) installed
 - [Maven](https://maven.apache.org/install.html) installed
-- [IntelliJ IDEA](https://www.jetbrains.com/idea/) or any preferred IDE
+- [IntelliJ IDEA](https://www.jetbrains.com/idea) or any preferred IDE
 
 ### Installation
 
