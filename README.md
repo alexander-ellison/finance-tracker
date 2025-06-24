@@ -54,7 +54,7 @@ Open your browser and navigate to `https://localhost:8080`.
 ```text
 finance-tracker/
 ├── .mvn/wrapper/
-    └── maven-wrapper.properties
+|   └── maven-wrapper.properties
 ├── src/
 │   ├── main/
 │   │   ├── java/
