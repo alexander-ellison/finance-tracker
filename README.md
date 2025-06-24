@@ -14,12 +14,12 @@ A personal finance tracker built with Spring Boot, designed to help users manage
 
 ## 🛠️ Technologies Used
 
-- Java 17
-- Spring Boot
-- Spring Data JPA
-- H2 Database
-- Lombok
-- Maven
+- [Java 17]([url](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html))
+- [Spring Boot]([url](https://spring.io/projects/spring-boot))
+- [Spring Data JPA]([url](https://spring.io/projects/spring-data-jpa))
+- [H2 Database]([url](https://h2database.com/html/main.html))
+- [Lombok]([url](https://projectlombok.org/))
+- [Maven]([url](https://maven.apache.org/))
 
 ## 🚀 Getting Started
 ### Prerequisites
