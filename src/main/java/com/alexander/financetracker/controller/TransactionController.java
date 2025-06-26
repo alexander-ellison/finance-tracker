@@ -2,27 +2,54 @@ package com.alexander.financetracker.controller;
 
 import com.alexander.financetracker.model.Transaction;
 import com.alexander.financetracker.service.TransactionService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/transactions")
+@RequiredArgsConstructor
 public class TransactionController {
+    private final TransactionService transactionService;
 
-    @Autowired
-    private TransactionService transactionService;
 
     @GetMapping
     public List<Transaction> getAllTransactions() {
         return transactionService.getAllTransactions();
     }
 
-    @PostMapping("/user/{userId}")
-    public Transaction createTransaction(@PathVariable Long userId, @RequestBody Transaction transaction) {
-        return transactionService.createTransaction(userId, transaction);
+    @GetMapping("/{id}")
+    public ResponseEntity<Transaction> getTransactionById(@PathVariable Long id) {
+        return ResponseEntity.ok(transactionService.getTransactionById(id));
     }
 
-    // Additional endpoints (e.g., getTransactionsByUser, updateTransaction, deleteTransaction) to be added here
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Transaction>> getTransactionsByUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(transactionService.getTransactionsByUser(userId));
+    }
+
+    @PostMapping("/user/{userId}")
+    public ResponseEntity<Transaction> createTransaction(
+            @PathVariable Long userId,
+            @Valid @RequestBody Transaction tx) {
+        Transaction created = transactionService.createTransaction(userId, tx);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Transaction> updateTransaction(
+            @PathVariable Long id,
+            @Valid @RequestBody Transaction txDetails) {
+        return ResponseEntity.ok(transactionService.updateTransaction(id, txDetails));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTransaction(@PathVariable Long id) {
+        transactionService.deleteTransaction(id);
+        return ResponseEntity.noContent().build();
+    }
 }

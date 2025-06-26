@@ -4,30 +4,48 @@ import com.alexander.financetracker.model.Transaction;
 import com.alexander.financetracker.model.User;
 import com.alexander.financetracker.repository.TransactionRepository;
 import com.alexander.financetracker.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class TransactionService {
+    private final TransactionRepository transactionRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private TransactionRepository transactionRepository;
-
-    @Autowired
-    private UserRepository userRepository;
+    public Transaction getTransactionById (Long id) {
+        return transactionRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Transaction not found"));
+    }
 
     public List<Transaction> getAllTransactions() {
         return transactionRepository.findAll();
     }
 
+    public List<Transaction> getTransactionsByUser(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
+        return transactionRepository.findByUser(user);
+    }
+
     public Transaction createTransaction(Long userId, Transaction transaction) {
-        Optional<User> user = userRepository.findById(userId);
-        user.ifPresent(transaction::setUser);
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
+        transaction.setUser(user);
         return transactionRepository.save(transaction);
     }
 
-    // Additional methods (e.g., getTransactionsByUser, updateTransaction, deleteTransaction) to be added here
+    public Transaction updateTransaction(Long id, Transaction txDetails) {
+        Transaction tx = getTransactionById(id);
+        if (txDetails.getAmount() != null) tx.setAmount(txDetails.getAmount());
+        if (txDetails.getType() != null) tx.setType(txDetails.getType());
+        if (txDetails.getCategory() != null) tx.setCategory(txDetails.getCategory());
+        if (txDetails.getDate() != null)  tx.setDate(txDetails.getDate());
+        return transactionRepository.save(tx);
+    }
+
+    public void deleteTransaction(Long id) {
+        Transaction tx = getTransactionById(id);
+        transactionRepository.delete(tx);
+    }
 }
