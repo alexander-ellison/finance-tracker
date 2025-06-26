@@ -77,6 +77,8 @@ finance-tracker/
 │   │   │               └── FinanceTrackerApplication.java
 │   │   └── resources/
 │   │       ├── static
+│   │       |   ├── finance-tracker.postman_collection.json
+│   │       |   └── openapi-finance-tracker.yaml
 │   │       ├── templates
 │   │       └── application.properties
 ├── pom.xml
