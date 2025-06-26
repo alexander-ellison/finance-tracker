@@ -1,5 +1,6 @@
 package com.alexander.financetracker.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -37,6 +38,7 @@ public class User {
     private BigDecimal budget;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Transaction> transactions;
     // When a User is deleted, all their transactions are also removed (no orphaned records)
 }

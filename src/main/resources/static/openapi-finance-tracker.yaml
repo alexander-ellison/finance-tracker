@@ -1,0 +1,330 @@
+openapi: 3.0.3
+info:
+  title: Finance Tracker API
+  version: 0.1.0
+  description: |
+    A simple finance tracking REST API for managing users and their income/expense transactions.
+servers:
+  - url: http://localhost:8080
+paths:
+  /api/users:
+    get:
+      summary: Get all users
+      responses:
+        '200':
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: Create a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+      responses:
+        '201':
+          description: Created user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '409':
+          description: Email already exists
+  /api/users/{userId}:
+    get:
+      summary: Get user by ID
+      parameters:
+        - $ref: '#/components/parameters/UserIdParam'
+      responses:
+        '200':
+          description: A user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+    put:
+      summary: Update a user by ID
+      parameters:
+        - $ref: '#/components/parameters/UserIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+      responses:
+        '200':
+          description: Updated user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+    delete:
+      summary: Delete a user
+      parameters:
+        - $ref: '#/components/parameters/UserIdParam'
+      responses:
+        '204':
+          description: User deleted
+        '404':
+          description: User not found
+
+  /api/transactions:
+    get:
+      summary: Get all transactions
+      responses:
+        '200':
+          description: A list of transactions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+  /api/transactions/{transactionId}:
+    get:
+      summary: Get transaction by ID
+      parameters:
+        - $ref: '#/components/parameters/TransactionIdParam'
+      responses:
+        '200':
+          description: A transaction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '404':
+          description: Transaction not found
+    put:
+      summary: Update a transaction
+      parameters:
+        - $ref: '#/components/parameters/TransactionIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionUpdateRequest'
+      responses:
+        '200':
+          description: Updated transaction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '404':
+          description: Transaction not found
+    delete:
+      summary: Delete a transaction
+      parameters:
+        - $ref: '#/components/parameters/TransactionIdParam'
+      responses:
+        '204':
+          description: Transaction deleted
+        '404':
+          description: Transaction not found
+
+  /api/transactions/user/{userId}:
+    get:
+      summary: Get transactions for a user
+      parameters:
+        - $ref: '#/components/parameters/UserIdParam'
+      responses:
+        '200':
+          description: List of transactions for user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+        '404':
+          description: User not found
+    post:
+      summary: Create a transaction for a user
+      parameters:
+        - $ref: '#/components/parameters/UserIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionCreateRequest'
+      responses:
+        '201':
+          description: Created transaction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '404':
+          description: User not found
+
+components:
+  parameters:
+    UserIdParam:
+      name: userId
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+    TransactionIdParam:
+      name: transactionId
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        role:
+          type: string
+          nullable: true
+        budget:
+          type: number
+          format: float
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionSummary'
+    UserCreateRequest:
+      type: object
+      required:
+        - name
+        - email
+        - password
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+        budget:
+          type: number
+          format: float
+    UserUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+        budget:
+          type: number
+          format: float
+
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        amount:
+          type: number
+          format: float
+        type:
+          $ref: '#/components/schemas/TransactionType'
+        category:
+          type: string
+        date:
+          type: string
+          format: date
+        user:
+          $ref: '#/components/schemas/UserSummary'
+
+    TransactionSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        amount:
+          type: number
+          format: float
+        type:
+          $ref: '#/components/schemas/TransactionType'
+        category:
+          type: string
+        date:
+          type: string
+          format: date
+
+    TransactionCreateRequest:
+      type: object
+      required:
+        - amount
+        - type
+        - category
+        - date
+      properties:
+        amount:
+          type: number
+          format: float
+        type:
+          $ref: '#/components/schemas/TransactionType'
+        category:
+          type: string
+        date:
+          type: string
+          format: date
+
+    TransactionUpdateRequest:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: float
+        type:
+          $ref: '#/components/schemas/TransactionType'
+        category:
+          type: string
+        date:
+          type: string
+          format: date
+
+    UserSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        email:
+          type: string
+        budget:
+          type: number
+          format: float
+
+    TransactionType:
+      type: string
+      enum:
+        - INCOME
+        - EXPENSE
